@@ -4,10 +4,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PaymentController } from './controllers/payment.controller';
 import { WebhookController } from './controllers/webhook.controller';
+
+import { PaymentStorageController } from './controllers/payment-storage.controller';
 import { MercadoPagoService } from './services/mercadopago.service';
 import { WebhookValidationService } from './services/webhook-validation.service';
 import { NotificationService } from './services/notification.service';
-import { AuditService } from './services/audit.service';
+
+import { EventosApiService } from './services/eventos-api.service';
+
+import { PaymentStorageService } from './services/payment-storage.service';
 import configuration from './config/configuration';
 
 @Module({
@@ -17,13 +22,22 @@ import configuration from './config/configuration';
       isGlobal: true,
     }),
   ],
-  controllers: [AppController, PaymentController, WebhookController],
+  controllers: [
+    AppController,
+    PaymentController,
+    WebhookController,
+
+    PaymentStorageController,
+  ],
   providers: [
-    AppService, 
-    MercadoPagoService, 
+    AppService,
+    MercadoPagoService,
     WebhookValidationService,
     NotificationService,
-    AuditService,
+
+    EventosApiService,
+
+    PaymentStorageService,
   ],
 })
 export class AppModule {}

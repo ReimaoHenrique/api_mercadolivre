@@ -22,22 +22,26 @@ API NestJS para integração completa com Checkout Pro do Mercado Pago, incluind
 ## 🔧 Instalação
 
 1. **Clone o repositório:**
+
 ```bash
 git clone <repository-url>
 cd mercadopago-api
 ```
 
 2. **Instale as dependências:**
+
 ```bash
 npm install
 ```
 
 3. **Configure as variáveis de ambiente:**
+
 ```bash
 cp .env.example .env
 ```
 
 Edite o arquivo `.env` com suas credenciais:
+
 ```env
 MERCADOPAGO_ACCESS_TOKEN=your_access_token_here
 MERCADOPAGO_PUBLIC_KEY=your_public_key_here
@@ -46,6 +50,7 @@ PORT=3000
 ```
 
 4. **Compile e execute:**
+
 ```bash
 # Desenvolvimento
 npm run start:dev
@@ -74,6 +79,7 @@ curl -X POST http://localhost:3000/payment/create-preference \
 ```
 
 ### Resposta:
+
 ```json
 {
   "success": true,
@@ -84,16 +90,181 @@ curl -X POST http://localhost:3000/payment/create-preference \
 }
 ```
 
+### Listar Pagamentos
+
+```bash
+# Listar todos os pagamentos
+curl "http://localhost:3000/payment/list"
+
+# Filtrar por status
+curl "http://localhost:3000/payment/list?status=approved"
+
+# Filtrar por referência externa
+curl "http://localhost:3000/payment/list?external_reference=PRODUCT_123"
+
+# Filtrar por email do pagador
+curl "http://localhost:3000/payment/list?payer_email=cliente@email.com"
+
+# Com paginação
+curl "http://localhost:3000/payment/list?limit=20&offset=40"
+```
+
+### Gerar Histórico de Pagamentos
+
+```bash
+# Histórico completo
+curl "http://localhost:3000/payment/history"
+
+# Histórico por período
+curl "http://localhost:3000/payment/history?start_date=2024-01-01&end_date=2024-12-31"
+
+# Histórico por status
+curl "http://localhost:3000/payment/history?status=approved"
+
+# Histórico limitado
+curl "http://localhost:3000/payment/history?limit=50"
+```
+
+### Visualizar Logs de Auditoria
+
+```bash
+# Todos os logs de auditoria
+curl "http://localhost:3000/payment/audit-logs"
+
+# Logs de evento específico (payment.approved.processing_completed)
+curl "http://localhost:3000/payment/audit-logs?event=payment.approved.processing_completed"
+
+# Logs por ID de pagamento
+curl "http://localhost:3000/payment/audit-logs?paymentId=123456"
+
+# Logs por referência externa
+curl "http://localhost:3000/payment/audit-logs?externalReference=PRODUCT_123"
+
+# Logs por período
+curl "http://localhost:3000/payment/audit-logs?startDate=2024-01-01&endDate=2024-12-31"
+
+# Logs por fonte
+curl "http://localhost:3000/payment/audit-logs?source=webhook"
+
+# Logs com limite
+curl "http://localhost:3000/payment/audit-logs?limit=50"
+```
+
+### Verificar Status por Referência Externa
+
+```bash
+# Verificar se um pagamento foi aprovado por referência externa
+curl "http://localhost:3000/payment/status-by-reference/PRODUCT_123"
+
+# Verificar pagamento de curso
+curl "http://localhost:3000/payment/status-by-reference/COURSE_456"
+
+# Verificar pagamento de serviço
+curl "http://localhost:3000/payment/status-by-reference/SERVICE_789"
+```
+
+### Visualizar Webhooks Salvos
+
+```bash
+# Listar todos os webhooks salvos
+curl "http://localhost:3000/webhook/list"
+
+# Filtrar por ação
+curl "http://localhost:3000/webhook/list?action=payment.updated"
+
+# Filtrar por status de processamento
+curl "http://localhost:3000/webhook/list?processed=true"
+
+# Limitar quantidade
+curl "http://localhost:3000/webhook/list?limit=10"
+
+# Ver estatísticas
+curl "http://localhost:3000/webhook/stats"
+
+# Buscar webhooks por payment ID
+curl "http://localhost:3000/webhook/by-payment/123456"
+
+# Buscar webhooks por referência externa
+curl "http://localhost:3000/webhook/by-reference/PRODUCT_123"
+
+# Limpar todos os webhooks
+curl -X DELETE "http://localhost:3000/webhook/clear"
+```
+
+**Resposta de Sucesso:**
+
+```json
+{
+  "success": true,
+  "message": "Status do pagamento encontrado para referência: PRODUCT_123",
+  "data": {
+    "externalReference": "PRODUCT_123",
+    "found": true,
+    "status": "approved",
+    "isSuccess": true,
+    "paymentDetails": {
+      "paymentId": 123456,
+      "externalReference": "PRODUCT_123",
+      "amount": 100.0,
+      "payerEmail": "cliente@email.com",
+      "status": "approved",
+      "isSuccess": true,
+      "timestamp": "2024-01-15T10:30:00Z",
+      "dateCreated": "2024-01-15T10:25:00Z",
+      "dateApproved": "2024-01-15T10:30:00Z",
+      "paymentMethod": "pix",
+      "statusDetail": "accredited",
+      "source": "webhook",
+      "processingCompleted": true,
+      "notificationSent": true
+    },
+    "eventHistory": [
+      {
+        "event": "payment.approved.processing_started",
+        "timestamp": "2024-01-15T09:15:00Z",
+        "status": "approved"
+      },
+      {
+        "event": "payment.approved.processing_completed",
+        "timestamp": "2024-01-15T10:30:00Z",
+        "status": "approved"
+      }
+    ],
+    "summary": {
+      "totalEvents": 2,
+      "lastEvent": "payment.approved.processing_completed",
+      "lastEventTime": "2024-01-15T10:30:00Z",
+      "processingCompleted": true
+    }
+  }
+}
+```
+
+### Consultar Status de Pagamento
+
+```bash
+curl "http://localhost:3000/payment/status/123456789"
+```
+
 ## 🔗 Endpoints
 
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| POST | `/payment/create-preference` | Criar preferência de pagamento |
-| GET | `/payment/success` | Retorno para pagamentos aprovados |
-| GET | `/payment/failure` | Retorno para pagamentos rejeitados |
-| GET | `/payment/pending` | Retorno para pagamentos pendentes |
-| GET | `/payment/status/:id` | Consultar status do pagamento |
-| POST | `/webhook/mercadopago` | Receber notificações do MP |
+| Método | Endpoint                                          | Descrição                                  |
+| ------ | ------------------------------------------------- | ------------------------------------------ |
+| POST   | `/payment/create-preference`                      | Criar preferência de pagamento             |
+| GET    | `/payment/success`                                | Retorno para pagamentos aprovados          |
+| GET    | `/payment/failure`                                | Retorno para pagamentos rejeitados         |
+| GET    | `/payment/pending`                                | Retorno para pagamentos pendentes          |
+| GET    | `/payment/status/:id`                             | Consultar status do pagamento              |
+| GET    | `/webhook/list`                                   | Lista todos os webhooks salvos com filtros |
+| GET    | `/webhook/stats`                                  | Mostra estatísticas dos webhooks           |
+| GET    | `/webhook/by-payment/:paymentId`                  | Busca webhooks por payment ID              |
+| GET    | `/webhook/by-reference/:externalReference`        | Busca webhooks por referência externa      |
+| DELETE | `/webhook/clear`                                  | Remove todos os webhooks salvos            |
+| GET    | `/payment/list`                                   | Listar pagamentos com filtros              |
+| GET    | `/payment/history`                                | Gerar histórico de pagamentos              |
+| GET    | `/payment/audit-logs`                             | Visualizar logs de auditoria               |
+| GET    | `/payment/status-by-reference/:externalReference` | Verificar status por referência externa    |
+| POST   | `/webhook/mercadopago`                            | Receber notificações do MP                 |
 
 ## 🔒 Configuração de Webhooks
 
@@ -125,16 +296,17 @@ src/
 
 A API processa automaticamente diferentes tipos de produtos baseado na referência externa:
 
-| Prefixo | Tipo | Ação |
-|---------|------|------|
-| `COURSE_` | Cursos online | Cria acesso e envia credenciais |
-| `PRODUCT_` | Produtos digitais | Gera link de download |
-| `SERVICE_` | Serviços | Ativa serviço específico |
-| `SUBSCRIPTION_` | Assinaturas | Configura renovação automática |
+| Prefixo         | Tipo              | Ação                            |
+| --------------- | ----------------- | ------------------------------- |
+| `COURSE_`       | Cursos online     | Cria acesso e envia credenciais |
+| `PRODUCT_`      | Produtos digitais | Gera link de download           |
+| `SERVICE_`      | Serviços          | Ativa serviço específico        |
+| `SUBSCRIPTION_` | Assinaturas       | Configura renovação automática  |
 
 ## 📊 Logs e Monitoramento
 
 ### Visualizar Logs
+
 ```bash
 # Logs da aplicação
 tail -f logs/application.log
@@ -144,6 +316,7 @@ grep "AUDIT_LOG" logs/application.log
 ```
 
 ### Métricas Importantes
+
 - Taxa de conversão de pagamentos
 - Tempo de processamento de webhooks
 - Falhas de validação
@@ -152,31 +325,38 @@ grep "AUDIT_LOG" logs/application.log
 ## 🧪 Testes
 
 ### Ambiente Sandbox
+
 Use credenciais de teste do Mercado Pago:
+
 ```env
 MERCADOPAGO_ACCESS_TOKEN=TEST-your-test-token
 ```
 
 ### Cartões de Teste
+
 - **Aprovado**: 4509 9535 6623 3704
 - **Rejeitado**: 4013 5406 8274 6260
 
 ### Simular Webhook
+
 Use o simulador no painel do Mercado Pago para testar webhooks.
 
 ## 🚨 Troubleshooting
 
 ### Webhook não recebido
+
 - ✅ URL acessível publicamente
 - ✅ HTTPS configurado
 - ✅ Porta 443 aberta
 
 ### Assinatura inválida
+
 - ✅ Webhook secret correto
 - ✅ Timestamp não expirado
 - ✅ Body não modificado
 
 ### Logs de Debug
+
 ```typescript
 // Habilitar logs detalhados
 this.logger.debug('Debug info', { data });
@@ -211,4 +391,3 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para de
 ---
 
 **Desenvolvido com ❤️ usando NestJS e TypeScript**
-

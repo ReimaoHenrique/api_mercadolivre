@@ -1,8 +1,8 @@
 # Configurações do Mercado Pago
 # Para SANDBOX (testes) - use credenciais que começam com TEST-
-MERCADOPAGO_ACCESS_TOKEN=APP_USR-4564619976609369-071020-6651c5a51c991c3ba949f1ac422e0553-159972839
-MERCADOPAGO_PUBLIC_KEY=APP_USR-24761659-3237-44fd-8f54-d972e9e65694
-MERCADOPAGO_WEBHOOK_SECRET=0b7a5fa80c105faa269555baadcd99dbda2e4ef632394b1ab96099d6953a0f52
+MERCADOPAGO_ACCESS_TOKEN=APP_USR-6164651998696003-071818-312961f4e55d5669862cd1380656616f-159972839
+MERCADOPAGO_PUBLIC_KEY=APP_USR-26482b90-6d16-459f-8532-0d08f22777fa
+MERCADOPAGO_WEBHOOK_SECRET=b4d5bf7ec70f6916544e6c338410ccaa86d234c211f0a9f173eddf57381cb063
 
 # Para PRODUÇÃO - use credenciais que começam com APP_USR-
 # MERCADOPAGO_ACCESS_TOKEN=APP_USR-1234567890-123456-abcdef1234567890abcdef1234567890-123456789
@@ -15,13 +15,16 @@ NODE_ENV=development
 # URLs de retorno (ajuste conforme seu domínio)
 SUCCESS_URL=https://koi-pretty-quietly.ngrok-free.app/:3000/payment/success
 FAILURE_URL=https://koi-pretty-quietly.ngrok-free.app/payment/failure
-PENDING_URL=https://koi-pretty-quietly.ngrok-free.app/payment/pending
+PENDING_URL=https://koi-pretty-quietly.ngrok-free.app/payment/pendingb
 
 # URL do webhook (deve ser acessível publicamente)
 # Para desenvolvimento local, use ngrok: https://abc123.ngrok.io/webhook/mercadopago
 # Para produção: https://seu-dominio.com/webhook/mercadopago
 WEBHOOK_URL=https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago
 
+# API de Eventos - Token para atualizar status do convidado
+EVENTOS_API_TOKEN=d02f312c49a3e7b62daccf1f6e925b1872cf4e891ea13d26d4d52b86d1448579
+EVENTOS_API_URL=https://koi-pretty-quietly.ngrok-free.app/api/eventos/convidados/status/id
 # Configurações opcionais para notificações
 # EMAIL_PROVIDER_API_KEY=sua_chave_do_provedor_de_email
 # SMS_PROVIDER_API_KEY=sua_chave_do_provedor_de_sms

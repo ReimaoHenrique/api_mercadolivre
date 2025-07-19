@@ -1,0 +1,258 @@
+[
+  {
+    "timestamp": "2025-07-19T00:02:41.815Z",
+    "event": "preference.created",
+    "preferenceId": "159972839-f0ffa252-c259-4bca-a60d-5f9e55f59f02",
+    "externalReference": "test_json_001",
+    "amount": 10,
+    "details": {
+      "title": "Teste JSON",
+      "quantity": 1,
+      "payerEmail": "joao@teste.com",
+      "backUrls": {
+        "success": "https://koi-pretty-quietly.ngrok-free.app/:3000/payment/success",
+        "failure": "https://koi-pretty-quietly.ngrok-free.app/payment/failure",
+        "pending": "https://koi-pretty-quietly.ngrok-free.app/payment/pendingb"
+      },
+      "notificationUrl": "https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago"
+    },
+    "source": "api",
+    "id": "audit_1752883361816_ozbywpeff"
+  },
+  {
+    "timestamp": "2025-07-19T00:03:18.625Z",
+    "event": "preference.created",
+    "preferenceId": "159972839-5d2712df-09d3-427f-8ad1-64378eb5207d",
+    "externalReference": "cmd2bcm64000dij6xripwo1st",
+    "amount": 1,
+    "details": {
+      "title": "Boreal Fest",
+      "quantity": 1,
+      "payerEmail": "joao@email.com",
+      "backUrls": {
+        "success": "https://koi-pretty-quietly.ngrok-free.app/:3000/payment/success",
+        "failure": "https://koi-pretty-quietly.ngrok-free.app/payment/failure",
+        "pending": "https://koi-pretty-quietly.ngrok-free.app/payment/pendingb"
+      },
+      "notificationUrl": "https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago"
+    },
+    "source": "api",
+    "id": "audit_1752883398626_620029cvb"
+  },
+  {
+    "timestamp": "2025-07-19T00:26:51.049Z",
+    "event": "preference.created",
+    "preferenceId": "159972839-136f1c1e-f7ff-4de1-ae80-ca212c5981e3",
+    "externalReference": "cmd2bcm64000dij6xripwo1st",
+    "amount": 1,
+    "details": {
+      "title": "Boreal Fest",
+      "quantity": 1,
+      "payerEmail": "joao@email.com",
+      "backUrls": {
+        "success": "https://koi-pretty-quietly.ngrok-free.app/:3000/payment/success",
+        "failure": "https://koi-pretty-quietly.ngrok-free.app/payment/failure",
+        "pending": "https://koi-pretty-quietly.ngrok-free.app/payment/pendingb"
+      },
+      "notificationUrl": "https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago"
+    },
+    "source": "api",
+    "id": "audit_1752884811050_hh96asr1w"
+  },
+  {
+    "timestamp": "2025-07-19T00:30:06.343Z",
+    "event": "payment.approved.processing_started",
+    "paymentId": 119119385184,
+    "externalReference": "cmd2bcm64000dij6xripwo1st",
+    "status": "approved",
+    "amount": 1,
+    "payerEmail": "XXXXXXXXXXX",
+    "details": {
+      "statusDetail": "accredited",
+      "paymentMethodId": "pix",
+      "paymentTypeId": "bank_transfer",
+      "dateCreated": "2025-07-18T20:27:55.000-04:00",
+      "dateApproved": "2025-07-18T20:30:05.000-04:00",
+      "processingStartedAt": "2025-07-19T00:30:06.342Z"
+    },
+    "source": "webhook",
+    "id": "audit_1752885006343_dib4z5e7q"
+  },
+  {
+    "timestamp": "2025-07-19T00:30:06.344Z",
+    "event": "payment.default_processing",
+    "paymentId": 119119385184,
+    "externalReference": "cmd2bcm64000dij6xripwo1st",
+    "status": "approved",
+    "amount": 1,
+    "payerEmail": "XXXXXXXXXXX",
+    "details": {
+      "statusDetail": "accredited",
+      "paymentMethodId": "pix",
+      "paymentTypeId": "bank_transfer",
+      "dateCreated": "2025-07-18T20:27:55.000-04:00",
+      "dateApproved": "2025-07-18T20:30:05.000-04:00",
+      "processedWithDefaultLogic": true
+    },
+    "source": "webhook",
+    "id": "audit_1752885006344_tchs59o34"
+  },
+  {
+    "timestamp": "2025-07-19T00:30:06.783Z",
+    "event": "payment.approved.processing_completed",
+    "paymentId": 119119385184,
+    "externalReference": "cmd2bcm64000dij6xripwo1st",
+    "status": "approved",
+    "amount": 1,
+    "payerEmail": "XXXXXXXXXXX",
+    "details": {
+      "statusDetail": "accredited",
+      "paymentMethodId": "pix",
+      "paymentTypeId": "bank_transfer",
+      "dateCreated": "2025-07-18T20:27:55.000-04:00",
+      "dateApproved": "2025-07-18T20:30:05.000-04:00",
+      "processingCompletedAt": "2025-07-19T00:30:06.783Z",
+      "notificationSent": true
+    },
+    "source": "webhook",
+    "id": "audit_1752885006784_8t8ufrq85"
+  },
+  {
+    "timestamp": "2025-07-19T00:43:00.979Z",
+    "event": "preference.created",
+    "preferenceId": "159972839-73742e67-09e2-4841-9db8-f8e564fa1d4c",
+    "externalReference": "cmd2bcm64000dij6xripwo1st",
+    "amount": 1,
+    "details": {
+      "title": "Boreal Fest",
+      "quantity": 1,
+      "payerEmail": "joao@email.com",
+      "backUrls": {
+        "success": "https://koi-pretty-quietly.ngrok-free.app/:3000/payment/success",
+        "failure": "https://koi-pretty-quietly.ngrok-free.app/payment/failure",
+        "pending": "https://koi-pretty-quietly.ngrok-free.app/payment/pendingb"
+      },
+      "notificationUrl": "https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago"
+    },
+    "source": "api",
+    "id": "audit_1752885780979_f82m39b1k"
+  },
+  {
+    "timestamp": "2025-07-19T00:47:31.922Z",
+    "event": "preference.created",
+    "preferenceId": "159972839-cca54b59-2a1a-43a9-919f-85c29ae33da4",
+    "externalReference": "cmd2bcm64s000dij6xripwo1st",
+    "amount": 1,
+    "details": {
+      "title": "Boreal Fest",
+      "quantity": 1,
+      "payerEmail": "joao@email.com",
+      "backUrls": {
+        "success": "https://koi-pretty-quietly.ngrok-free.app/:3000/payment/success",
+        "failure": "https://koi-pretty-quietly.ngrok-free.app/payment/failure",
+        "pending": "https://koi-pretty-quietly.ngrok-free.app/payment/pendingb"
+      },
+      "notificationUrl": "https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago"
+    },
+    "source": "api",
+    "id": "audit_1752886051923_anbrnxhfg"
+  },
+  {
+    "timestamp": "2025-07-19T00:49:21.338Z",
+    "event": "preference.created",
+    "preferenceId": "159972839-ceefc504-4aa8-40cd-bbbc-b2094bb88518",
+    "externalReference": "cmd2az6wx0005ij6xquzctctx",
+    "amount": 1,
+    "details": {
+      "title": "Boreal Fest",
+      "quantity": 1,
+      "payerEmail": "joao@email.com",
+      "backUrls": {
+        "success": "https://koi-pretty-quietly.ngrok-free.app/:3000/payment/success",
+        "failure": "https://koi-pretty-quietly.ngrok-free.app/payment/failure",
+        "pending": "https://koi-pretty-quietly.ngrok-free.app/payment/pendingb"
+      },
+      "notificationUrl": "https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago"
+    },
+    "source": "api",
+    "id": "audit_1752886161338_2fcnabbgy"
+  },
+  {
+    "timestamp": "2025-07-19T00:53:14.310Z",
+    "event": "payment.approved.processing_started",
+    "paymentId": 119122130276,
+    "externalReference": "cmd2az6wx0005ij6xquzctctx",
+    "status": "approved",
+    "amount": 1,
+    "payerEmail": "XXXXXXXXXXX",
+    "details": {
+      "statusDetail": "accredited",
+      "paymentMethodId": "pix",
+      "paymentTypeId": "bank_transfer",
+      "dateCreated": "2025-07-18T20:52:49.000-04:00",
+      "dateApproved": "2025-07-18T20:53:13.000-04:00",
+      "processingStartedAt": "2025-07-19T00:53:14.310Z"
+    },
+    "source": "webhook",
+    "id": "audit_1752886394311_98qrq27cd"
+  },
+  {
+    "timestamp": "2025-07-19T00:53:14.312Z",
+    "event": "payment.default_processing",
+    "paymentId": 119122130276,
+    "externalReference": "cmd2az6wx0005ij6xquzctctx",
+    "status": "approved",
+    "amount": 1,
+    "payerEmail": "XXXXXXXXXXX",
+    "details": {
+      "statusDetail": "accredited",
+      "paymentMethodId": "pix",
+      "paymentTypeId": "bank_transfer",
+      "dateCreated": "2025-07-18T20:52:49.000-04:00",
+      "dateApproved": "2025-07-18T20:53:13.000-04:00",
+      "processedWithDefaultLogic": true
+    },
+    "source": "webhook",
+    "id": "audit_1752886394312_jizlk94cm"
+  },
+  {
+    "timestamp": "2025-07-19T00:53:14.768Z",
+    "event": "payment.approved.processing_completed",
+    "paymentId": 119122130276,
+    "externalReference": "cmd2az6wx0005ij6xquzctctx",
+    "status": "approved",
+    "amount": 1,
+    "payerEmail": "XXXXXXXXXXX",
+    "details": {
+      "statusDetail": "accredited",
+      "paymentMethodId": "pix",
+      "paymentTypeId": "bank_transfer",
+      "dateCreated": "2025-07-18T20:52:49.000-04:00",
+      "dateApproved": "2025-07-18T20:53:13.000-04:00",
+      "processingCompletedAt": "2025-07-19T00:53:14.768Z",
+      "notificationSent": true
+    },
+    "source": "webhook",
+    "id": "audit_1752886394768_env8xdilv"
+  },
+  {
+    "timestamp": "2025-07-19T00:57:02.625Z",
+    "event": "preference.created",
+    "preferenceId": "159972839-e7f3a887-cb1c-42c3-9d49-ee41d1765ac6",
+    "externalReference": "TESTE_SEM_PAYERS_001",
+    "amount": 10,
+    "details": {
+      "title": "Produto Teste",
+      "quantity": 1,
+      "payerEmail": "teste@email.com",
+      "backUrls": {
+        "success": "https://koi-pretty-quietly.ngrok-free.app/:3000/payment/success",
+        "failure": "https://koi-pretty-quietly.ngrok-free.app/payment/failure",
+        "pending": "https://koi-pretty-quietly.ngrok-free.app/payment/pendingb"
+      },
+      "notificationUrl": "https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago"
+    },
+    "source": "api",
+    "id": "audit_1752886622625_4hbf940hk"
+  }
+]

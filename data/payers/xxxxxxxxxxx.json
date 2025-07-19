@@ -1,0 +1,37 @@
+{
+  "email": "XXXXXXXXXXX",
+  "payerId": "1549213243",
+  "identification": {
+    "number": null,
+    "type": null
+  },
+  "dateFirstSeen": "2025-07-19T00:53:14.310Z",
+  "dateLastUpdated": "2025-07-19T00:53:14.310Z",
+  "liveMode": true,
+  "payments": [
+    {
+      "paymentId": "119122130276",
+      "externalReference": "cmd2az6wx0005ij6xquzctctx",
+      "status": "approved",
+      "amount": 1,
+      "currency": "BRL",
+      "paymentMethodId": "pix",
+      "dateCreated": "2025-07-18T20:52:49.000-04:00",
+      "dateApproved": "2025-07-18T20:53:13.000-04:00"
+    }
+  ],
+  "auditLogs": [],
+  "processingDetails": {
+    "lastProcessedAt": "2025-07-19T00:53:14.310Z",
+    "totalNotificationsSent": 1
+  },
+  "stats": {
+    "totalPayments": 1,
+    "totalAmount": 1,
+    "approvedPayments": 1,
+    "pendingPayments": 0,
+    "rejectedPayments": 0,
+    "firstPaymentDate": "2025-07-18T20:52:49.000-04:00",
+    "lastPaymentDate": "2025-07-18T20:52:49.000-04:00"
+  }
+}

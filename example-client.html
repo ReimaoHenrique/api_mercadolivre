@@ -1,0 +1,1139 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exemplo - Checkout Pro Mercado Pago</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .product {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin: 10px 0;
+        border-radius: 5px;
+        background: #fafafa;
+      }
+      .product h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      .price {
+        font-size: 24px;
+        font-weight: bold;
+        color: #009ee3;
+        margin: 10px 0;
+      }
+      .btn {
+        background-color: #009ee3;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 10px 5px;
+      }
+      .btn:hover {
+        background-color: #007bb3;
+      }
+      .btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      .form-group {
+        margin: 15px 0;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+      .response {
+        margin: 20px 0;
+        padding: 15px;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      .loading {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        color: #856404;
+      }
+      .config {
+        background-color: #e2e3e5;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .config h4 {
+        margin-top: 0;
+      }
+      .section {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 5px;
+        background: #fafafa;
+      }
+      .section h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      code {
+        background-color: #f1f1f1;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🛒 Exemplo - Checkout Pro Mercado Pago</h1>
+      <p>
+        Este é um exemplo de integração com a API NestJS do Checkout Pro do
+        Mercado Pago.
+      </p>
+
+      <!-- Configuração da API -->
+      <div class="config">
+        <h4>⚙️ Configuração da API</h4>
+        <div class="form-group">
+          <label for="apiUrl">URL da API:</label>
+          <input
+            type="text"
+            id="apiUrl"
+            value="http://localhost:3000"
+            placeholder="http://localhost:3000"
+          />
+        </div>
+      </div>
+
+      <!-- Dados do Comprador -->
+      <h3>👤 Dados do Comprador</h3>
+      <div class="form-group">
+        <label for="payerName">Nome:</label>
+        <input
+          type="text"
+          id="payerName"
+          value="João Silva"
+          placeholder="Nome completo"
+        />
+      </div>
+      <div class="form-group">
+        <label for="payerEmail">Email:</label>
+        <input
+          type="email"
+          id="payerEmail"
+          value="joao@email.com"
+          placeholder="email@exemplo.com"
+        />
+      </div>
+      <div class="form-group">
+        <label for="payerPhone">Telefone:</label>
+        <input
+          type="text"
+          id="payerPhone"
+          value="11999999999"
+          placeholder="11999999999"
+        />
+      </div>
+
+      <!-- Produtos Disponíveis -->
+      <h3>🛍️ Produtos Disponíveis</h3>
+
+      <div class="product">
+        <h3>📚 Curso de Programação</h3>
+        <p>Curso completo de desenvolvimento web com certificado.</p>
+        <div class="price">R$ 299,90</div>
+        <button
+          class="btn"
+          onclick="createPayment('COURSE_WEB_DEV_2025', 'Curso de Programação Web', 299.90)"
+        >
+          Comprar Curso
+        </button>
+      </div>
+
+      <div class="product">
+        <h3>📖 E-book JavaScript</h3>
+        <p>Guia completo de JavaScript moderno em PDF.</p>
+        <div class="price">R$ 49,90</div>
+        <button
+          class="btn"
+          onclick="createPayment('PRODUCT_EBOOK_JS', 'E-book JavaScript Moderno', 49.90)"
+        >
+          Comprar E-book
+        </button>
+      </div>
+
+      <div class="product">
+        <h3>🔧 Consultoria Técnica</h3>
+        <p>1 hora de consultoria técnica personalizada.</p>
+        <div class="price">R$ 150,00</div>
+        <button
+          class="btn"
+          onclick="createPayment('SERVICE_CONSULTORIA_1H', 'Consultoria Técnica 1h', 150.00)"
+        >
+          Contratar Consultoria
+        </button>
+      </div>
+
+      <div class="product">
+        <h3>⭐ Assinatura Premium</h3>
+        <p>Acesso premium por 1 mês a todos os recursos.</p>
+        <div class="price">R$ 29,90/mês</div>
+        <button
+          class="btn"
+          onclick="createPayment('SUBSCRIPTION_PREMIUM_MONTHLY', 'Assinatura Premium Mensal', 29.90)"
+        >
+          Assinar Premium
+        </button>
+      </div>
+
+      <div class="section">
+        <h3>📊 Histórico de Pagamentos</h3>
+        <div class="form-group">
+          <label for="startDate">Data Inicial (YYYY-MM-DD):</label>
+          <input type="date" id="startDate" placeholder="2024-01-01" />
+        </div>
+        <div class="form-group">
+          <label for="endDate">Data Final (YYYY-MM-DD):</label>
+          <input type="date" id="endDate" placeholder="2024-12-31" />
+        </div>
+        <div class="form-group">
+          <label for="historyStatus">Status:</label>
+          <select id="historyStatus">
+            <option value="">Todos</option>
+            <option value="approved">Aprovado</option>
+            <option value="pending">Pendente</option>
+            <option value="rejected">Rejeitado</option>
+            <option value="cancelled">Cancelado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="historyLimit">Limite:</label>
+          <input
+            type="number"
+            id="historyLimit"
+            value="100"
+            min="1"
+            max="1000"
+          />
+        </div>
+        <button onclick="getPaymentHistory()">Gerar Histórico</button>
+      </div>
+
+      <div class="section">
+        <h3>📋 Listar Pagamentos</h3>
+        <div class="form-group">
+          <label for="listStatus">Status:</label>
+          <select id="listStatus">
+            <option value="">Todos</option>
+            <option value="approved">Aprovado</option>
+            <option value="pending">Pendente</option>
+            <option value="rejected">Rejeitado</option>
+            <option value="cancelled">Cancelado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="externalReference">Referência Externa:</label>
+          <input type="text" id="externalReference" placeholder="PRODUCT_123" />
+        </div>
+        <div class="form-group">
+          <label for="payerEmail">Email do Pagador:</label>
+          <input type="email" id="payerEmail" placeholder="cliente@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="listLimit">Limite:</label>
+          <input type="number" id="listLimit" value="50" min="1" max="100" />
+        </div>
+        <div class="form-group">
+          <label for="listOffset">Offset:</label>
+          <input type="number" id="listOffset" value="0" min="0" />
+        </div>
+        <button onclick="listPayments()">Listar Pagamentos</button>
+      </div>
+
+      <div class="section">
+        <h3>🔍 Consultar Status de Pagamento</h3>
+        <div class="form-group">
+          <label for="paymentId">ID do Pagamento:</label>
+          <input type="text" id="paymentId" placeholder="123456789" />
+        </div>
+        <button onclick="checkPaymentStatus()">Consultar Status</button>
+      </div>
+
+      <div class="section">
+        <h3>✅ Verificar Pagamento por Referência Externa</h3>
+        <p>
+          Digite a referência externa para verificar se o pagamento foi aprovado
+          com sucesso
+        </p>
+        <div class="form-group">
+          <label for="externalReferenceCheck">Referência Externa:</label>
+          <input
+            type="text"
+            id="externalReferenceCheck"
+            placeholder="PRODUCT_123"
+          />
+        </div>
+        <button onclick="checkPaymentByReference()">Verificar Pagamento</button>
+      </div>
+
+      <div class="section">
+        <h3>📋 Webhooks Salvos</h3>
+        <p>
+          Visualize todos os webhooks recebidos do Mercado Pago salvos em JSON
+        </p>
+        <div class="form-group">
+          <label for="webhookAction">Ação:</label>
+          <select id="webhookAction">
+            <option value="">Todas as ações</option>
+            <option value="payment.created">payment.created</option>
+            <option value="payment.updated">payment.updated</option>
+            <option value="payment.approved">payment.approved</option>
+            <option value="payment.rejected">payment.rejected</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="webhookProcessed">Status:</label>
+          <select id="webhookProcessed">
+            <option value="">Todos</option>
+            <option value="true">Processados</option>
+            <option value="false">Com erro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="webhookLimit">Limite:</label>
+          <input type="number" id="webhookLimit" value="20" min="1" max="100" />
+        </div>
+        <button onclick="getWebhooks()">Buscar Webhooks</button>
+        <button onclick="getWebhookStats()">Estatísticas</button>
+        <button onclick="clearWebhooks()" style="background-color: #dc3545">
+          Limpar Webhooks
+        </button>
+      </div>
+
+      <div class="section">
+        <h3>📋 Logs de Auditoria (JSON)</h3>
+        <p>
+          Visualize os logs de auditoria salvos em JSON, incluindo o evento
+          <code>preference.created</code> e outros
+        </p>
+        <div class="form-group">
+          <label for="auditEvent">Evento:</label>
+          <select id="auditEvent">
+            <option value="">Todos os eventos</option>
+            <option value="preference.created">preference.created</option>
+            <option value="payment.created">payment.created</option>
+            <option value="payment.updated">payment.updated</option>
+            <option value="payment.approved">payment.approved</option>
+            <option value="payment.approved.processing_completed">payment.approved.processing_completed</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="auditSource">Fonte:</label>
+          <select id="auditSource">
+            <option value="">Todas as fontes</option>
+            <option value="api">API</option>
+            <option value="webhook">Webhook</option>
+            <option value="manual">Manual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="auditLimit">Limite:</label>
+          <input type="number" id="auditLimit" value="20" min="1" max="100" />
+        </div>
+        <button onclick="getAuditLogs()">Buscar Logs de Auditoria</button>
+        <button onclick="getAuditStats()">Estatísticas</button>
+        <button onclick="clearAuditLogs()" style="background-color: #dc3545;">Limpar Logs</button>
+      </div>
+        <div class="form-group">
+          <label for="auditEvent">Evento:</label>
+          <select id="auditEvent">
+            <option value="">Todos os eventos</option>
+            <option value="payment.approved.processing_completed">
+              payment.approved.processing_completed
+            </option>
+            <option value="payment.approved.processing_started">
+              payment.approved.processing_started
+            </option>
+            <option value="payment.created">payment.created</option>
+            <option value="payment.updated">payment.updated</option>
+            <option value="preference.created">preference.created</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="auditPaymentId">ID do Pagamento:</label>
+          <input type="text" id="auditPaymentId" placeholder="123456" />
+        </div>
+        <div class="form-group">
+          <label for="auditExternalReference">Referência Externa:</label>
+          <input
+            type="text"
+            id="auditExternalReference"
+            placeholder="PRODUCT_123"
+          />
+        </div>
+        <div class="form-group">
+          <label for="auditStartDate">Data Inicial (YYYY-MM-DD):</label>
+          <input type="date" id="auditStartDate" />
+        </div>
+        <div class="form-group">
+          <label for="auditEndDate">Data Final (YYYY-MM-DD):</label>
+          <input type="date" id="auditEndDate" />
+        </div>
+        <div class="form-group">
+          <label for="auditSource">Fonte:</label>
+          <select id="auditSource">
+            <option value="">Todas as fontes</option>
+            <option value="webhook">Webhook</option>
+            <option value="api">API</option>
+            <option value="manual">Manual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="auditLimit">Limite:</label>
+          <input type="number" id="auditLimit" value="100" min="1" max="1000" />
+        </div>
+        <button onclick="getAuditLogs()">Buscar Logs de Auditoria</button>
+      </div>
+
+      <div id="response" class="response" style="display: none"></div>
+    </div>
+
+    <script>
+      // Função para criar pagamento
+      async function createPayment(externalRef, title, price) {
+        const apiUrl = document.getElementById('apiUrl').value;
+        const payerName = document.getElementById('payerName').value;
+        const payerEmail = document.getElementById('payerEmail').value;
+        const payerPhone = document.getElementById('payerPhone').value;
+
+        // Validar dados
+        if (!payerName || !payerEmail) {
+          showResponse(
+            'error',
+            'Por favor, preencha nome e email do comprador.',
+          );
+          return;
+        }
+
+        const [firstName, ...lastNameParts] = payerName.split(' ');
+        const lastName = lastNameParts.join(' ') || '';
+
+        const requestData = {
+          title: title,
+          description: `Compra de ${title}`,
+          quantity: 1,
+          unit_price: price,
+          currency_id: 'BRL',
+          external_reference: externalRef,
+          payer: {
+            name: firstName,
+            surname: lastName,
+            email: payerEmail,
+            phone: {
+              area_code: payerPhone.substring(0, 2),
+              number: payerPhone.substring(2),
+            },
+          },
+        };
+
+        showResponse('loading', 'Criando preferência de pagamento...');
+
+        try {
+          const response = await fetch(`${apiUrl}/payment/create-preference`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            showResponse(
+              'success',
+              `Preferência criada com sucesso!\n\nID: ${data.data.id}\n\nRedirecionando para o Mercado Pago...`,
+            );
+
+            // Redirecionar para o checkout
+            setTimeout(() => {
+              window.open(data.data.init_point, '_blank');
+            }, 2000);
+          } else {
+            showResponse(
+              'error',
+              `Erro ao criar preferência:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      // Função para consultar status do pagamento
+      async function checkPaymentStatus() {
+        const apiUrl = document.getElementById('apiUrl').value;
+        const paymentId = document.getElementById('paymentId').value;
+
+        if (!paymentId) {
+          showResponse('error', 'Por favor, informe o ID do pagamento.');
+          return;
+        }
+
+        showResponse('loading', 'Consultando status do pagamento...');
+
+        try {
+          const response = await fetch(`${apiUrl}/payment/status/${paymentId}`);
+          const data = await response.json();
+
+          if (data.success) {
+            showResponse(
+              'success',
+              `Status do pagamento:\n\n${JSON.stringify(data.data, null, 2)}`,
+            );
+          } else {
+            showResponse(
+              'error',
+              `Erro ao consultar pagamento:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function getPaymentHistory() {
+        const apiUrl = document.getElementById('apiUrl').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const status = document.getElementById('historyStatus').value;
+        const limit = document.getElementById('historyLimit').value;
+
+        showResponse('loading', 'Gerando histórico de pagamentos...');
+
+        try {
+          const params = new URLSearchParams();
+          if (startDate) params.append('start_date', startDate);
+          if (endDate) params.append('end_date', endDate);
+          if (status) params.append('status', status);
+          if (limit) params.append('limit', limit);
+
+          const response = await fetch(`${apiUrl}/payment/history?${params}`);
+          const data = await response.json();
+
+          if (data.success) {
+            const summary = data.data.summary;
+            const payments = data.data.payments;
+
+            let message = `📊 RESUMO DO HISTÓRICO:\n\n`;
+            message += `Total de pagamentos: ${summary.total}\n`;
+            message += `Aprovados: ${summary.approved}\n`;
+            message += `Pendentes: ${summary.pending}\n`;
+            message += `Rejeitados: ${summary.rejected}\n`;
+            message += `Valor total: R$ ${summary.totalAmount.toFixed(2)}\n`;
+            message += `Valor médio: R$ ${summary.averageAmount.toFixed(2)}\n\n`;
+
+            message += `📋 ÚLTIMOS PAGAMENTOS:\n\n`;
+            payments.slice(0, 5).forEach((payment) => {
+              message += `ID: ${payment.id}\n`;
+              message += `Status: ${payment.status} (${payment.status_detail})\n`;
+              message += `Valor: R$ ${payment.transaction_amount}\n`;
+              message += `Referência: ${payment.external_reference}\n`;
+              message += `Pagador: ${payment.payer?.email}\n`;
+              message += `Data: ${new Date(payment.date_created).toLocaleString('pt-BR')}\n`;
+              message += `---\n`;
+            });
+
+            if (payments.length > 5) {
+              message += `\n... e mais ${payments.length - 5} pagamentos`;
+            }
+
+            showResponse('success', message);
+          } else {
+            showResponse(
+              'error',
+              `Erro ao gerar histórico:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function listPayments() {
+        const apiUrl = document.getElementById('apiUrl').value;
+        const status = document.getElementById('listStatus').value;
+        const externalReference =
+          document.getElementById('externalReference').value;
+        const payerEmail = document.getElementById('payerEmail').value;
+        const limit = document.getElementById('listLimit').value;
+        const offset = document.getElementById('listOffset').value;
+
+        showResponse('loading', 'Buscando lista de pagamentos...');
+
+        try {
+          const params = new URLSearchParams();
+          if (status) params.append('status', status);
+          if (externalReference)
+            params.append('external_reference', externalReference);
+          if (payerEmail) params.append('payer_email', payerEmail);
+          if (limit) params.append('limit', limit);
+          if (offset) params.append('offset', offset);
+
+          const response = await fetch(`${apiUrl}/payment/list?${params}`);
+          const data = await response.json();
+
+          if (data.success) {
+            const payments = data.data.payments;
+            const pagination = data.data.pagination;
+
+            let message = `📋 LISTA DE PAGAMENTOS:\n\n`;
+            message += `Total encontrado: ${pagination.total}\n`;
+            message += `Mostrando: ${payments.length} de ${pagination.total}\n`;
+            message += `Página: ${Math.floor(pagination.offset / pagination.limit) + 1}\n\n`;
+
+            payments.forEach((payment) => {
+              message += `ID: ${payment.id}\n`;
+              message += `Status: ${payment.status} (${payment.status_detail})\n`;
+              message += `Valor: R$ ${payment.transaction_amount}\n`;
+              message += `Referência: ${payment.external_reference}\n`;
+              message += `Pagador: ${payment.payer?.email}\n`;
+              message += `Método: ${payment.payment_method_id}\n`;
+              message += `Data: ${new Date(payment.date_created).toLocaleString('pt-BR')}\n`;
+              message += `---\n`;
+            });
+
+            if (pagination.hasMore) {
+              message += `\n⚠️ Há mais pagamentos. Use o offset para ver mais.`;
+            }
+
+            showResponse('success', message);
+          } else {
+            showResponse(
+              'error',
+              `Erro ao listar pagamentos:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function checkPaymentByReference() {
+        const apiUrl = document.getElementById('apiUrl').value;
+        const externalReference = document.getElementById(
+          'externalReferenceCheck',
+        ).value;
+
+        if (!externalReference) {
+          showResponse('error', 'Por favor, informe a referência externa.');
+          return;
+        }
+
+        showResponse('loading', 'Verificando status do pagamento...');
+
+        try {
+          const response = await fetch(
+            `${apiUrl}/payment/status-by-reference/${externalReference}`,
+          );
+          const data = await response.json();
+
+          if (data.success) {
+            const paymentDetails = data.data.paymentDetails;
+            const eventHistory = data.data.eventHistory;
+            const summary = data.data.summary;
+
+            let message = `✅ VERIFICAÇÃO DE PAGAMENTO:\n\n`;
+            message += `Referência Externa: ${externalReference}\n`;
+            message += `Status: ${paymentDetails.status.toUpperCase()}\n`;
+            message += `Sucesso: ${paymentDetails.isSuccess ? '✅ SIM' : '❌ NÃO'}\n\n`;
+
+            if (paymentDetails.isSuccess) {
+              message += `🎉 PAGAMENTO APROVADO!\n\n`;
+            } else {
+              message += `⚠️ PAGAMENTO NÃO APROVADO\n\n`;
+            }
+
+            message += `📋 DETALHES DO PAGAMENTO:\n`;
+            message += `ID do Pagamento: ${paymentDetails.paymentId}\n`;
+            message += `Valor: R$ ${paymentDetails.amount?.toFixed(2) || 'N/A'}\n`;
+            message += `Email: ${paymentDetails.payerEmail || 'N/A'}\n`;
+            message += `Método: ${paymentDetails.paymentMethod || 'N/A'}\n`;
+            message += `Data de Criação: ${paymentDetails.dateCreated ? new Date(paymentDetails.dateCreated).toLocaleString('pt-BR') : 'N/A'}\n`;
+            message += `Data de Aprovação: ${paymentDetails.dateApproved ? new Date(paymentDetails.dateApproved).toLocaleString('pt-BR') : 'N/A'}\n`;
+            message += `Processamento Concluído: ${paymentDetails.processingCompleted ? '✅ SIM' : '❌ NÃO'}\n`;
+            message += `Notificação Enviada: ${paymentDetails.notificationSent ? '✅ SIM' : '❌ NÃO'}\n\n`;
+
+            if (eventHistory && eventHistory.length > 0) {
+              message += `📝 HISTÓRICO DE EVENTOS:\n`;
+              eventHistory.forEach((event, index) => {
+                message += `${index + 1}. ${event.event}\n`;
+                message += `   Data: ${new Date(event.timestamp).toLocaleString('pt-BR')}\n`;
+                message += `   Status: ${event.status || 'N/A'}\n`;
+                message += `   ---\n`;
+              });
+              message += `\n`;
+            }
+
+            message += `📊 RESUMO:\n`;
+            message += `Total de eventos: ${summary.totalEvents}\n`;
+            message += `Último evento: ${summary.lastEvent}\n`;
+            message += `Última atualização: ${new Date(summary.lastEventTime).toLocaleString('pt-BR')}\n`;
+
+            showResponse('success', message);
+          } else {
+            showResponse(
+              'error',
+              `Pagamento não encontrado para a referência: ${externalReference}\n\n${data.message}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function getAuditLogs() {
+        const apiUrl = document.getElementById('apiUrl').value;
+        const event = document.getElementById('auditEvent').value;
+        const paymentId = document.getElementById('auditPaymentId').value;
+        const externalReference = document.getElementById(
+          'auditExternalReference',
+        ).value;
+        const startDate = document.getElementById('auditStartDate').value;
+        const endDate = document.getElementById('auditEndDate').value;
+        const source = document.getElementById('auditSource').value;
+        const limit = document.getElementById('auditLimit').value;
+
+        showResponse('loading', 'Buscando logs de auditoria...');
+
+        try {
+          const params = new URLSearchParams();
+          if (event) params.append('event', event);
+          if (paymentId) params.append('paymentId', paymentId);
+          if (externalReference)
+            params.append('externalReference', externalReference);
+          if (startDate) params.append('startDate', startDate);
+          if (endDate) params.append('endDate', endDate);
+          if (source) params.append('source', source);
+          if (limit) params.append('limit', limit);
+
+          const response = await fetch(
+            `${apiUrl}/payment/audit-logs?${params}`,
+          );
+          const data = await response.json();
+
+          if (data.success) {
+            const logs = data.data.logs;
+            const stats = data.data.statistics;
+
+            let message = `📋 LOGS DE AUDITORIA:\n\n`;
+            message += `📊 ESTATÍSTICAS:\n`;
+            message += `Total de logs: ${stats.total}\n`;
+            message += `Valor total: R$ ${stats.totalAmount.toFixed(2)}\n`;
+            message += `Valor médio: R$ ${stats.averageAmount.toFixed(2)}\n\n`;
+
+            if (Object.keys(stats.byEvent).length > 0) {
+              message += `📈 POR EVENTO:\n`;
+              Object.entries(stats.byEvent).forEach(([event, count]) => {
+                message += `  ${event}: ${count}\n`;
+              });
+              message += `\n`;
+            }
+
+            if (Object.keys(stats.bySource).length > 0) {
+              message += `📊 POR FONTE:\n`;
+              Object.entries(stats.bySource).forEach(([source, count]) => {
+                message += `  ${source}: ${count}\n`;
+              });
+              message += `\n`;
+            }
+
+            message += `📝 LOGS ENCONTRADOS:\n\n`;
+            logs.forEach((log, index) => {
+              message += `${index + 1}. ${log.event}\n`;
+              message += `   Timestamp: ${new Date(log.timestamp).toLocaleString('pt-BR')}\n`;
+              message += `   Payment ID: ${log.paymentId}\n`;
+              message += `   Referência: ${log.externalReference}\n`;
+              message += `   Valor: R$ ${log.amount?.toFixed(2) || 'N/A'}\n`;
+              message += `   Email: ${log.payerEmail || 'N/A'}\n`;
+              message += `   Fonte: ${log.source}\n`;
+
+              if (log.details) {
+                message += `   Detalhes:\n`;
+                Object.entries(log.details).forEach(([key, value]) => {
+                  message += `     ${key}: ${value}\n`;
+                });
+              }
+              message += `   ---\n`;
+            });
+
+            if (logs.length === 0) {
+              message += `Nenhum log encontrado com os filtros aplicados.\n`;
+            }
+
+            showResponse('success', message);
+          } else {
+            showResponse(
+              'error',
+              `Erro ao buscar logs de auditoria:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function getWebhooks() {
+        const apiUrl = document.getElementById('apiUrl').value;
+        const action = document.getElementById('webhookAction').value;
+        const processed = document.getElementById('webhookProcessed').value;
+        const limit = document.getElementById('webhookLimit').value;
+
+        showResponse('loading', 'Buscando webhooks...');
+
+        try {
+          const params = new URLSearchParams();
+          if (action) params.append('action', action);
+          if (processed) params.append('processed', processed);
+          if (limit) params.append('limit', limit);
+
+          const response = await fetch(`${apiUrl}/webhook/list?${params}`);
+          const data = await response.json();
+
+          if (data.success) {
+            const webhooks = data.data.webhooks;
+            const total = data.data.total;
+            const filtered = data.data.filtered;
+
+            let message = `📋 WEBHOOKS SALVOS:\n\n`;
+            message += `📊 RESUMO:\n`;
+            message += `Total de webhooks: ${total}\n`;
+            message += `Filtrados: ${filtered}\n`;
+            message += `Mostrando: ${webhooks.length}\n\n`;
+
+            if (webhooks.length === 0) {
+              message += `Nenhum webhook encontrado com os filtros aplicados.\n`;
+            } else {
+              message += `📝 ÚLTIMOS WEBHOOKS:\n\n`;
+              webhooks.forEach((webhook, index) => {
+                message += `${index + 1}. ${webhook.action}\n`;
+                message += `   ID: ${webhook.id}\n`;
+                message += `   Timestamp: ${new Date(webhook.timestamp).toLocaleString('pt-BR')}\n`;
+                message += `   Payment ID: ${webhook.paymentId || 'N/A'}\n`;
+                message += `   Referência: ${webhook.externalReference || 'N/A'}\n`;
+                message += `   Status: ${webhook.processed ? '✅ Processado' : '❌ Com erro'}\n`;
+
+                if (webhook.error) {
+                  message += `   Erro: ${webhook.error}\n`;
+                }
+
+                message += `   ---\n`;
+              });
+            }
+
+            showResponse('success', message);
+          } else {
+            showResponse(
+              'error',
+              `Erro ao buscar webhooks:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function getWebhookStats() {
+        const apiUrl = document.getElementById('apiUrl').value;
+
+        showResponse('loading', 'Buscando estatísticas...');
+
+        try {
+          const response = await fetch(`${apiUrl}/webhook/stats`);
+          const data = await response.json();
+
+          if (data.success) {
+            const stats = data.data;
+
+            let message = `📊 ESTATÍSTICAS DOS WEBHOOKS:\n\n`;
+            message += `Total de webhooks: ${stats.total}\n`;
+            message += `Últimas 24h: ${stats.last24h}\n\n`;
+
+            message += `📈 POR STATUS:\n`;
+            message += `Processados: ${stats.byStatus.processed}\n`;
+            message += `Com erro: ${stats.byStatus.failed}\n\n`;
+
+            if (Object.keys(stats.byAction).length > 0) {
+              message += `📋 POR AÇÃO:\n`;
+              Object.entries(stats.byAction).forEach(([action, count]) => {
+                message += `  ${action}: ${count}\n`;
+              });
+            }
+
+            showResponse('success', message);
+          } else {
+            showResponse(
+              'error',
+              `Erro ao buscar estatísticas:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function clearWebhooks() {
+        const apiUrl = document.getElementById('apiUrl').value;
+
+        if (!confirm('Tem certeza que deseja limpar todos os webhooks?')) {
+          return;
+        }
+
+        showResponse('loading', 'Limpando webhooks...');
+
+        try {
+          const response = await fetch(`${apiUrl}/webhook/clear`, {
+            method: 'DELETE',
+          });
+          const data = await response.json();
+
+          if (data.success) {
+            showResponse(
+              'success',
+              '✅ Todos os webhooks foram removidos com sucesso!',
+            );
+          } else {
+            showResponse(
+              'error',
+              `Erro ao limpar webhooks:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function getAuditLogs() {
+        const apiUrl = document.getElementById('apiUrl').value;
+        const event = document.getElementById('auditEvent').value;
+        const source = document.getElementById('auditSource').value;
+        const limit = document.getElementById('auditLimit').value;
+
+        showResponse('loading', 'Buscando logs de auditoria...');
+
+        try {
+          const params = new URLSearchParams();
+          if (event) params.append('event', event);
+          if (source) params.append('source', source);
+          if (limit) params.append('limit', limit);
+
+          const response = await fetch(`${apiUrl}/audit/logs?${params}`);
+          const data = await response.json();
+
+          if (data.success) {
+            const logs = data.data.logs;
+            const total = data.data.total;
+            const filtered = data.data.filtered;
+
+            let message = `📋 LOGS DE AUDITORIA (JSON):\n\n`;
+            message += `📊 RESUMO:\n`;
+            message += `Total de logs: ${total}\n`;
+            message += `Filtrados: ${filtered}\n`;
+            message += `Mostrando: ${logs.length}\n\n`;
+
+            if (logs.length === 0) {
+              message += `Nenhum log encontrado com os filtros aplicados.\n`;
+            } else {
+              message += `📝 ÚLTIMOS LOGS:\n\n`;
+              logs.forEach((log, index) => {
+                message += `${index + 1}. ${log.event}\n`;
+                message += `   ID: ${log.id}\n`;
+                message += `   Timestamp: ${new Date(log.timestamp).toLocaleString('pt-BR')}\n`;
+                message += `   Fonte: ${log.source}\n`;
+                
+                if (log.paymentId) {
+                  message += `   Payment ID: ${log.paymentId}\n`;
+                }
+                if (log.preferenceId) {
+                  message += `   Preference ID: ${log.preferenceId}\n`;
+                }
+                if (log.externalReference) {
+                  message += `   Referência: ${log.externalReference}\n`;
+                }
+                if (log.amount) {
+                  message += `   Valor: R$ ${log.amount}\n`;
+                }
+                if (log.payerEmail) {
+                  message += `   Email: ${log.payerEmail}\n`;
+                }
+                
+                message += `   ---\n`;
+              });
+            }
+
+            showResponse('success', message);
+          } else {
+            showResponse(
+              'error',
+              `Erro ao buscar logs de auditoria:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function getAuditStats() {
+        const apiUrl = document.getElementById('apiUrl').value;
+
+        showResponse('loading', 'Buscando estatísticas...');
+
+        try {
+          const response = await fetch(`${apiUrl}/audit/stats`);
+          const data = await response.json();
+
+          if (data.success) {
+            const stats = data.data;
+
+            let message = `📊 ESTATÍSTICAS DOS LOGS DE AUDITORIA:\n\n`;
+            message += `Total de logs: ${stats.total}\n`;
+            message += `Últimas 24h: ${stats.last24h}\n\n`;
+
+            if (Object.keys(stats.byEvent).length > 0) {
+              message += `📋 POR EVENTO:\n`;
+              Object.entries(stats.byEvent).forEach(([event, count]) => {
+                message += `  ${event}: ${count}\n`;
+              });
+              message += `\n`;
+            }
+
+            if (Object.keys(stats.bySource).length > 0) {
+              message += `📋 POR FONTE:\n`;
+              Object.entries(stats.bySource).forEach(([source, count]) => {
+                message += `  ${source}: ${count}\n`;
+              });
+              message += `\n`;
+            }
+
+            if (Object.keys(stats.byStatus).length > 0) {
+              message += `📋 POR STATUS:\n`;
+              Object.entries(stats.byStatus).forEach(([status, count]) => {
+                message += `  ${status}: ${count}\n`;
+              });
+            }
+
+            showResponse('success', message);
+          } else {
+            showResponse(
+              'error',
+              `Erro ao buscar estatísticas:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      async function clearAuditLogs() {
+        const apiUrl = document.getElementById('apiUrl').value;
+
+        if (!confirm('Tem certeza que deseja limpar todos os logs de auditoria?')) {
+          return;
+        }
+
+        showResponse('loading', 'Limpando logs de auditoria...');
+
+        try {
+          const response = await fetch(`${apiUrl}/audit/clear`, {
+            method: 'DELETE',
+          });
+          const data = await response.json();
+
+          if (data.success) {
+            showResponse(
+              'success',
+              '✅ Todos os logs de auditoria foram removidos com sucesso!',
+            );
+          } else {
+            showResponse(
+              'error',
+              `Erro ao limpar logs de auditoria:\n${JSON.stringify(data, null, 2)}`,
+            );
+          }
+        } catch (error) {
+          showResponse('error', `Erro de conexão:\n${error.message}`);
+        }
+      }
+
+      // Função para exibir resposta
+      function showResponse(type, message) {
+        const responseDiv = document.getElementById('response');
+        responseDiv.className = `response ${type}`;
+        responseDiv.textContent = message;
+        responseDiv.style.display = 'block';
+
+        // Scroll para a resposta
+        responseDiv.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // Verificar se a API está rodando
+      window.onload = async function () {
+        const apiUrl = document.getElementById('apiUrl').value;
+        try {
+          const response = await fetch(apiUrl);
+          if (response.ok) {
+            showResponse('success', '✅ API está rodando e acessível!');
+          } else {
+            showResponse(
+              'error',
+              '❌ API não está respondendo. Verifique se está rodando na URL configurada.',
+            );
+          }
+        } catch (error) {
+          showResponse(
+            'error',
+            `❌ Erro ao conectar com a API: ${error.message}\n\nVerifique se a API está rodando em: ${apiUrl}`,
+          );
+        }
+      };
+    </script>
+  </body>
+</html>

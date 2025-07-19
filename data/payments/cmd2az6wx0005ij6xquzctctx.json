@@ -1,0 +1,280 @@
+{
+  "externalReference": "cmd2az6wx0005ij6xquzctctx",
+  "status": "approved",
+  "dateCreated": "2025-07-18T20:52:49.000-04:00",
+  "preferenceCreatedAt": "2025-07-19T00:49:21.339Z",
+  "message": "Preferência de pagamento criada - aguardando pagamento",
+  "paymentId": "119122130276",
+  "amount": 1,
+  "currency": "BRL",
+  "payerEmail": "XXXXXXXXXXX",
+  "paymentMethodId": "pix",
+  "paymentTypeId": "bank_transfer",
+  "statusDetail": "accredited",
+  "dateApproved": "2025-07-18T20:53:13.000-04:00",
+  "dateLastUpdated": "2025-07-19T00:53:14.308Z",
+  "liveMode": true,
+  "userId": "159972839",
+  "webhookData": {
+    "accounts_info": null,
+    "acquirer_reconciliation": [],
+    "additional_info": {
+      "bank_info": {
+        "is_same_bank_account_owner": true
+      },
+      "ip_address": "177.50.221.92",
+      "items": [
+        {
+          "description": "Uma festa",
+          "id": "item_1752886160681",
+          "quantity": "1",
+          "title": "Boreal Fest",
+          "unit_price": "1"
+        }
+      ],
+      "payer": {
+        "first_name": "Rafael",
+        "last_name": "Silva"
+      },
+      "tracking_id": "platform:v1-whitelabel,so:ALL,type:N/A,security:none"
+    },
+    "authorization_code": null,
+    "binary_mode": false,
+    "brand_id": null,
+    "build_version": "3.115.0-rc-1",
+    "call_for_authorize_id": null,
+    "callback_url": null,
+    "captured": true,
+    "card": {},
+    "charges_details": [
+      {
+        "accounts": {
+          "from": "collector",
+          "to": "mp"
+        },
+        "amounts": {
+          "original": 0.01,
+          "refunded": 0
+        },
+        "client_id": 0,
+        "date_created": "2025-07-18T20:52:49.000-04:00",
+        "id": "119122130276-001",
+        "last_updated": "2025-07-18T20:52:49.000-04:00",
+        "metadata": {
+          "reason": "",
+          "source": "rule-engine"
+        },
+        "name": "mercadopago_fee",
+        "refund_charges": [],
+        "reserve_id": null,
+        "type": "fee"
+      }
+    ],
+    "charges_execution_info": {
+      "internal_execution": {
+        "date": "2025-07-18T20:52:49.661-04:00",
+        "execution_id": "01K0G2PQA78QX2SH2MC05HQP27"
+      }
+    },
+    "collector_id": 159972839,
+    "corporation_id": null,
+    "counter_currency": null,
+    "coupon_amount": 0,
+    "currency_id": "BRL",
+    "date_approved": "2025-07-18T20:53:13.000-04:00",
+    "date_created": "2025-07-18T20:52:49.000-04:00",
+    "date_last_updated": "2025-07-18T20:53:13.000-04:00",
+    "date_of_expiration": "2025-07-19T20:52:49.000-04:00",
+    "deduction_schema": null,
+    "description": "Boreal Fest",
+    "differential_pricing_id": null,
+    "external_reference": "cmd2az6wx0005ij6xquzctctx",
+    "fee_details": [
+      {
+        "amount": 0.01,
+        "fee_payer": "collector",
+        "type": "mercadopago_fee"
+      }
+    ],
+    "financing_group": null,
+    "id": 119122130276,
+    "installments": 1,
+    "integrator_id": null,
+    "issuer_id": "12501",
+    "live_mode": true,
+    "marketplace_owner": null,
+    "merchant_account_id": null,
+    "merchant_number": null,
+    "metadata": {},
+    "money_release_date": "2025-07-18T20:53:13.000-04:00",
+    "money_release_schema": null,
+    "money_release_status": "released",
+    "notification_url": "https://koi-pretty-quietly.ngrok-free.app/webhook/mercadopago",
+    "operation_type": "regular_payment",
+    "order": {
+      "id": "32527076681",
+      "type": "mercadopago"
+    },
+    "payer": {
+      "email": "XXXXXXXXXXX",
+      "entity_type": null,
+      "first_name": null,
+      "id": "1549213243",
+      "identification": {
+        "number": null,
+        "type": null
+      },
+      "last_name": null,
+      "operator_id": null,
+      "phone": {
+        "number": null,
+        "extension": null,
+        "area_code": null
+      },
+      "type": null
+    },
+    "payment_method": {
+      "id": "pix",
+      "issuer_id": "12501",
+      "type": "bank_transfer"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "platform_id": null,
+    "point_of_interaction": {
+      "application_data": {
+        "name": "checkout-off",
+        "operating_system": null,
+        "version": "v2"
+      },
+      "business_info": {
+        "branch": "Merchant Services",
+        "sub_unit": "checkout_pro",
+        "unit": "online_payments"
+      },
+      "sub_type": "INTER_PSP",
+      "transaction_data": {
+        "bank_info": {
+          "collector": {
+            "account_holder_name": "Marcio Henrique Reimao de Souza Silva",
+            "account_id": 15566639236,
+            "long_name": "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA.",
+            "transfer_account_id": null
+          },
+          "is_same_bank_account_owner": true,
+          "origin_bank_id": null,
+          "origin_wallet_id": null,
+          "payer": {
+            "account_id": 1770926,
+            "branch": "1",
+            "external_account_id": null,
+            "id": null,
+            "identification": {},
+            "is_end_consumer": null,
+            "long_name": "BANCO C6 S.A."
+          }
+        },
+        "bank_transfer_id": 116894645538,
+        "e2e_id": null,
+        "financial_institution": 1,
+        "infringement_notification": {
+          "status": null,
+          "type": null
+        },
+        "merchant_category_code": null,
+        "qr_code": "00020126580014br.gov.bcb.pix01360a1d5179-ae0f-4806-991f-9cb4049cb68c52040000530398654041.005802BR5914HENRIQUEREIMAO6008Salvador62250521mpqrinter11912213027663043F66",
+        "qr_code_base64": "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",
+        "ticket_url": "https://www.mercadopago.com.br/payments/119122130276/ticket?caller_id=1549213243&hash=91bb8152-3860-4760-b7bd-6a9e966bbddd",
+        "transaction_id": "PIXE31872495202507190053tl3ogZePWle"
+      },
+      "type": "CHECKOUT"
+    },
+    "pos_id": null,
+    "processing_mode": "aggregator",
+    "refunds": [],
+    "release_info": null,
+    "shipping_amount": 0,
+    "sponsor_id": null,
+    "statement_descriptor": null,
+    "status": "approved",
+    "status_detail": "accredited",
+    "store_id": null,
+    "tags": null,
+    "taxes_amount": 0,
+    "transaction_amount": 1,
+    "transaction_amount_refunded": 0,
+    "transaction_details": {
+      "acquirer_reference": null,
+      "bank_transfer_id": 116894645538,
+      "external_resource_url": null,
+      "financial_institution": "1",
+      "installment_amount": 0,
+      "net_received_amount": 0.99,
+      "overpaid_amount": 0,
+      "payable_deferral_period": null,
+      "payment_method_reference_id": null,
+      "total_paid_amount": 1,
+      "transaction_id": "PIXE31872495202507190053tl3ogZePWle"
+    },
+    "api_response": {
+      "status": 200,
+      "headers": {
+        "date": [
+          "Sat, 19 Jul 2025 00:53:14 GMT"
+        ],
+        "content-type": [
+          "application/json;charset=UTF-8"
+        ],
+        "transfer-encoding": [
+          "chunked"
+        ],
+        "connection": [
+          "close"
+        ],
+        "vary": [
+          "Accept-Encoding, Accept,Accept-Encoding"
+        ],
+        "cache-control": [
+          "max-age=0"
+        ],
+        "x-content-type-options": [
+          "nosniff"
+        ],
+        "x-request-id": [
+          "613c36ae-71da-4f96-828a-6a0abf3dfc04"
+        ],
+        "x-xss-protection": [
+          "1; mode=block"
+        ],
+        "strict-transport-security": [
+          "max-age=16070400; includeSubDomains; preload, max-age=31536000; includeSubDomains"
+        ],
+        "access-control-allow-origin": [
+          "*"
+        ],
+        "access-control-allow-headers": [
+          "Content-Type"
+        ],
+        "access-control-allow-methods": [
+          "PUT, GET, POST, DELETE, OPTIONS"
+        ],
+        "access-control-max-age": [
+          "86400"
+        ],
+        "timing-allow-origin": [
+          "*"
+        ],
+        "content-encoding": [
+          "gzip"
+        ]
+      }
+    }
+  },
+  "processingDetails": {
+    "processingStartedAt": "2025-07-19T00:53:14.308Z"
+  },
+  "businessLogic": {
+    "processedWithDefaultLogic": true
+  },
+  "auditLogs": []
+}
