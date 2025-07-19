@@ -1,140 +1,297 @@
-# Integração com API de Eventos - Mercado Pago
+# 📋 Documentação - Integração com API de Eventos
 
-## Visão Geral
+## 🎯 Visão Geral
 
-Esta integração permite que quando um pagamento for aprovado no Mercado Pago, o status do convidado seja automaticamente atualizado na API de eventos.
+Este sistema integra pagamentos do Mercado Pago com uma API de eventos externa, enviando atualizações de status de convidados quando pagamentos são aprovados.
 
-## Como Funciona
+## 🔧 Configuração
 
-### 1. Fluxo de Pagamento
+### Variáveis de Ambiente
 
-1. **Criação da Preferência**: Quando uma preferência de pagamento é criada, o `external_reference` é definido como o ID do convidado
-2. **Pagamento**: O usuário realiza o pagamento no Mercado Pago
-3. **Webhook**: O Mercado Pago envia um webhook para `/webhook/mercadopago` quando o status do pagamento muda
-4. **Processamento**: O sistema processa o webhook e, se o pagamento for aprovado, atualiza o status do convidado
-
-### 2. Mapeamento de Status
-
-| Status Mercado Pago | Status Convidado | Descrição           |
-| ------------------- | ---------------- | ------------------- |
-| `approved`          | `confirmado`     | Pagamento aprovado  |
-| `pending`           | `pendente`       | Pagamento pendente  |
-| `cancelled`         | `cancelado`      | Pagamento cancelado |
-| `rejected`          | `cancelado`      | Pagamento rejeitado |
-
-### 3. Configuração
-
-As seguintes variáveis de ambiente devem ser configuradas:
+Adicione estas variáveis ao seu arquivo `.env`:
 
 ```env
-# API de Eventos - Token para atualizar status do convidado
-EVENTOS_API_TOKEN=d02f312c49a3e7b62daccf1f6e925b1872cf4e891ea13d26d4d52b86d1448579
-EVENTOS_API_URL=https://koi-pretty-quietly.ngrok-free.app/api/eventos/convidados/status
+# API de Eventos
+EVENTOS_API_TOKEN=seu_token_aqui
+EVENTOS_API_URL=https://jvdpz4zf-3002.brs.devtunnels.ms/api/eventos/convidados/status/id/
 ```
 
-### 4. Endpoint da API de Eventos
+### Estrutura de Dados
 
-A API de eventos deve ter o seguinte endpoint:
-
-```
-PUT https://koi-pretty-quietly.ngrok-free.app/api/eventos/convidados/status/{id}
-```
-
-**Headers:**
-
-```
-Authorization: Bearer d02f312c49a3e7b62daccf1f6e925b1872cf4e891ea13d26d4d52b86d1448579
-Content-Type: application/json
-```
-
-**Body:**
+#### Pagamento (JSON)
 
 ```json
 {
-  "id": "cmd27meh70003ijsdb58nfa6o",
+  "id": 123456789,
+  "status": "approved",
+  "external_reference": "HR2bdx0e000fij6xqvjtley4",
+  "transaction_amount": 100.0,
+  "date_approved": "2025-07-18T21:22:39.000-04:00",
+  "date_created": "2025-07-18T21:21:51.000-04:00"
+}
+```
+
+#### Payload para API de Eventos
+
+```json
+{
+  "id": "HR2bdx0e000fij6xqvjtley4",
   "status": "confirmado"
 }
 ```
 
-### 5. Teste da Integração
+## 🚀 Funcionalidades
 
-Para testar se a integração está funcionando, use o endpoint:
+### 1. Monitoramento Automático de Arquivos
 
-```
-GET /payment/test-eventos-api?convidadoId=cmd27meh70003ijsdb58nfa6o
-```
+O sistema monitora automaticamente a pasta `data/payments/` e processa pagamentos quando:
 
-Este endpoint irá:
+- Arquivos são modificados
+- Status é "approved"
+- Não foi processado anteriormente
 
-1. Testar a conectividade com a API de eventos
-2. Tentar atualizar o status do convidado com dados de teste
-3. Retornar o resultado da operação
+### 2. Mapeamento de Status
 
-### 6. Logs e Monitoramento
+| Status Mercado Pago | Status Eventos API |
+| ------------------- | ------------------ |
+| `approved`          | `confirmado`       |
+| `pending`           | `pendente`         |
+| `cancelled`         | `cancelado`        |
+| `rejected`          | `cancelado`        |
 
-O sistema registra logs detalhados para monitorar a integração:
+### 3. Endpoints de Teste
 
-- **Sucesso**: Log quando o status do convidado é atualizado com sucesso
-- **Erro**: Log detalhado quando há falha na atualização
-- **Auditoria**: Todos os eventos são registrados no sistema de auditoria
-
-### 7. Tratamento de Erros
-
-O sistema trata os seguintes tipos de erro:
-
-- **401**: Token de autorização inválido
-- **404**: Convidado não encontrado
-- **500+**: Erro interno na API de eventos
-- **Timeout**: Timeout na chamada (10 segundos)
-
-### 8. Exemplo de Uso
-
-1. **Criar preferência de pagamento:**
+#### Testar Processamento de Pagamento
 
 ```bash
-POST /payment/preference
+POST /api/payment-storage/test-process
+Content-Type: application/json
+
 {
-  "title": "Ingresso Evento",
-  "description": "Ingresso para o evento",
-  "quantity": 1,
-  "unit_price": 100.00,
-  "external_reference": "cmd27meh70003ijsdb58nfa6o",
-  "payer": {
-    "email": "usuario@email.com"
-  }
+  "externalReference": "HR2bdx0e000fij6xqvjtley4"
 }
 ```
 
-2. **Usuário paga no Mercado Pago**
+#### Verificar Status do Monitor
 
-3. **Webhook é recebido automaticamente:**
+```bash
+GET /api/payment-monitor/status
+```
 
-```json
+#### Reprocessar Pagamento Específico
+
+```bash
+POST /api/payment-monitor/reprocess
+Content-Type: application/json
+
 {
-  "type": "payment",
-  "action": "payment.updated",
-  "data": {
-    "id": "1234567890"
-  }
+  "externalReference": "HR2bdx0e000fij6xqvjtley4"
 }
 ```
 
-4. **Status do convidado é atualizado automaticamente na API de eventos**
+#### Reprocessar Todos os Pagamentos Aprovados
 
-### 9. Segurança
+```bash
+POST /api/payment-monitor/reprocess-all
+```
 
-- Token de autorização obrigatório para todas as chamadas
-- Validação de assinatura do webhook do Mercado Pago
+## 📁 Estrutura de Arquivos
+
+```
+src/
+├── services/
+│   ├── eventos-api.service.ts      # Comunicação com API de Eventos
+│   ├── payment-monitor.service.ts  # Monitoramento de arquivos
+│   └── payment-storage.service.ts  # Armazenamento de pagamentos
+├── controllers/
+│   ├── payment-monitor.controller.ts    # Endpoints de monitoramento
+│   └── payment-storage.controller.ts    # Endpoints de teste
+└── config/
+    └── configuration.ts            # Configurações da aplicação
+```
+
+## 🔄 Fluxo de Processamento
+
+### 1. Detecção de Mudança
+
+```typescript
+// payment-monitor.service.ts
+fs.watch(paymentsDir, (eventType, filename) => {
+  if (filename && filename.endsWith('.json')) {
+    this.processPaymentFile(filename);
+  }
+});
+```
+
+### 2. Validação de Pagamento
+
+```typescript
+// Verifica se o pagamento é válido para processamento
+if (paymentData.status === 'approved' && !paymentData.monitoringTriggered) {
+  // Processa pagamento
+}
+```
+
+### 3. Envio para API de Eventos
+
+```typescript
+// eventos-api.service.ts
+const payload = {
+  id: externalReference,
+  status: 'confirmado',
+};
+
+await fetch(url, {
+  method: 'PUT',
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(payload),
+});
+```
+
+## 📊 Logs e Monitoramento
+
+### Logs de Sucesso
+
+```
+🚀 ENVIANDO REQUISIÇÃO PARA API DE EVENTOS:
+📍 URL: https://jvdpz4zf-3002.brs.devtunnels.ms/api/eventos/convidados/status/id/
+📋 Payload: {
+  "id": "HR2bdx0e000fij6xqvjtley4",
+  "status": "confirmado"
+}
+🔑 Token: Configurado
+⏰ Timestamp: 2025-01-19T11:05:01.000Z
+
+✅ RESPOSTA DA API DE EVENTOS - SUCESSO:
+📊 Status Code: 200
+🆔 Convidado ID: HR2bdx0e000fij6xqvjtley4
+📝 Status Enviado: confirmado
+⏰ Timestamp: 2025-01-19T11:05:01.000Z
+```
+
+### Logs de Erro
+
+```
+❌ RESPOSTA DA API DE EVENTOS - ERRO:
+📊 Status Code: 404
+🆔 Convidado ID: HR2bdx0e000fij6xqvjtley4
+📝 Status Enviado: confirmado
+📄 Response Data: Convidado não encontrado
+⏰ Timestamp: 2025-01-19T11:05:01.000Z
+```
+
+## 🛠️ Como Usar
+
+### 1. Iniciar o Sistema
+
+```bash
+npm run start:dev
+```
+
+### 2. Testar Manualmente
+
+```bash
+# Testar processamento de um pagamento
+curl -X POST http://localhost:3000/api/payment-storage/test-process \
+  -H "Content-Type: application/json" \
+  -d '{"externalReference": "HR2bdx0e000fij6xqvjtley4"}'
+
+# Verificar status do monitor
+curl http://localhost:3000/api/payment-monitor/status
+```
+
+### 3. Modificar Arquivo de Pagamento
+
+Para testar o monitoramento automático, modifique qualquer campo em um arquivo JSON na pasta `data/payments/`:
+
+```bash
+# Exemplo: modificar dataLastUpdated
+echo '{"dateLastUpdated": "'$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)'"}' > temp.json
+jq -s '.[0] * .[1]' data/payments/HR2bdx0e000fij6xqvjtley4.json temp.json > data/payments/HR2bdx0e000fij6xqvjtley4.json
+rm temp.json
+```
+
+## 🔒 Segurança
+
+### Autenticação
+
+- Token Bearer obrigatório para todas as requisições
 - Timeout de 10 segundos para evitar travamentos
-- Logs detalhados para auditoria
+- Validação de configurações na inicialização
 
-### 10. Troubleshooting
+### Prevenção de Duplicação
 
-**Problema**: Status do convidado não é atualizado
-**Solução**: Verificar logs e testar conectividade com `/payment/test-eventos-api`
+- Campo `monitoringTriggered` evita processamento duplicado
+- Timestamp de processamento para auditoria
+- Logs detalhados para rastreamento
 
-**Problema**: Erro 401 na API de eventos
-**Solução**: Verificar se o `EVENTOS_API_TOKEN` está correto
+## 🚨 Tratamento de Erros
 
-**Problema**: Timeout na chamada
-**Solução**: Verificar se a API de eventos está respondendo dentro de 10 segundos
+### Tipos de Erro
+
+1. **401 Unauthorized**: Token inválido
+2. **404 Not Found**: Convidado não encontrado
+3. **500 Internal Server Error**: Erro interno da API
+4. **Timeout**: Requisição excedeu 10 segundos
+
+### Recuperação
+
+- Sistema continua funcionando mesmo com erros
+- Logs detalhados para debugging
+- Endpoints de reprocessamento manual
+- Retry automático não implementado (pode ser adicionado)
+
+## 📈 Monitoramento
+
+### Métricas Disponíveis
+
+- Total de pagamentos processados
+- Sucessos vs falhas
+- Tempo de resposta da API
+- Status do monitor de arquivos
+
+### Endpoints de Status
+
+```bash
+GET /api/payment-monitor/status
+# Retorna: { "isMonitoring": true, "processedCount": 5, "lastProcessed": "..." }
+```
+
+## 🔧 Manutenção
+
+### Limpeza de Logs
+
+Os logs são mantidos em memória durante a execução. Para persistência, considere:
+
+- Implementar banco de dados
+- Usar sistema de logs externo
+- Rotação de arquivos de log
+
+### Backup de Dados
+
+- Arquivos de pagamento em `data/payments/`
+- Logs de auditoria em `data/audit-logs/`
+- Configurações em `.env`
+
+## 📞 Suporte
+
+### Debugging
+
+1. Verifique as variáveis de ambiente
+2. Confirme se a API de eventos está acessível
+3. Analise os logs detalhados
+4. Use os endpoints de teste
+
+### Contatos
+
+- Desenvolvedor: [Seu Nome]
+- API de Eventos: [Contato da API]
+- Documentação: Este arquivo
+
+---
+
+**Última atualização**: 19/01/2025
+**Versão**: 1.0.0

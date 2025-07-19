@@ -31,6 +31,14 @@ export class EventosApiService {
   ): Promise<boolean> {
     try {
       if (!this.apiToken || !this.apiBaseUrl) {
+        console.log('⚠️ CONFIGURAÇÕES DA API DE EVENTOS NÃO ENCONTRADAS:');
+        console.log(
+          '🔑 Token:',
+          this.apiToken ? 'Configurado' : 'NÃO CONFIGURADO',
+        );
+        console.log('📍 URL:', this.apiBaseUrl || 'NÃO CONFIGURADA');
+        console.log('⏰ Timestamp:', new Date().toISOString());
+
         this.logger.error('Configurações da API de eventos não encontradas');
         return false;
       }
@@ -40,7 +48,24 @@ export class EventosApiService {
         status: statusData.status,
       });
 
-      const url = `${this.apiBaseUrl}/${convidadoId}`;
+      // Enviar JSON no formato especificado: { "id": "externalReference", "status": "confirmado" }
+      const payload = {
+        id: convidadoId,
+        status: statusData.status,
+      };
+
+      // URL correta: usar apenas a baseUrl (que já deve incluir /id/)
+      const url = this.apiBaseUrl;
+
+      // Console log para debug
+      console.log('🚀 ENVIANDO REQUISIÇÃO PARA API DE EVENTOS:');
+      console.log('📍 URL:', url);
+      console.log('📋 Payload:', JSON.stringify(payload, null, 2));
+      console.log(
+        '🔑 Token:',
+        this.apiToken ? 'Configurado' : 'NÃO CONFIGURADO',
+      );
+      console.log('⏰ Timestamp:', new Date().toISOString());
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos
@@ -52,13 +77,19 @@ export class EventosApiService {
             Authorization: `Bearer ${this.apiToken}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(statusData),
+          body: JSON.stringify(payload),
           signal: controller.signal,
         });
 
         clearTimeout(timeoutId);
 
         if (response.status === 200 || response.status === 204) {
+          console.log('✅ RESPOSTA DA API DE EVENTOS - SUCESSO:');
+          console.log('📊 Status Code:', response.status);
+          console.log('🆔 Convidado ID:', convidadoId);
+          console.log('📝 Status Enviado:', statusData.status);
+          console.log('⏰ Timestamp:', new Date().toISOString());
+
           this.logger.log('Status do convidado atualizado com sucesso', {
             convidadoId,
             status: statusData.status,
@@ -67,6 +98,13 @@ export class EventosApiService {
           return true;
         } else {
           const responseData = await response.text();
+          console.log('❌ RESPOSTA DA API DE EVENTOS - ERRO:');
+          console.log('📊 Status Code:', response.status);
+          console.log('🆔 Convidado ID:', convidadoId);
+          console.log('📝 Status Enviado:', statusData.status);
+          console.log('📄 Response Data:', responseData);
+          console.log('⏰ Timestamp:', new Date().toISOString());
+
           this.logger.warn('Resposta inesperada da API de eventos', {
             convidadoId,
             status: statusData.status,
@@ -81,6 +119,12 @@ export class EventosApiService {
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Erro desconhecido';
+
+      console.log('💥 ERRO NA REQUISIÇÃO PARA API DE EVENTOS:');
+      console.log('🆔 Convidado ID:', convidadoId);
+      console.log('📝 Status Tentado:', statusData.status);
+      console.log('❌ Erro:', errorMessage);
+      console.log('⏰ Timestamp:', new Date().toISOString());
 
       this.logger.error('Erro ao atualizar status do convidado', {
         convidadoId,

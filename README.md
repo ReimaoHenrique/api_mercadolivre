@@ -7,6 +7,9 @@ API NestJS para integração completa com Checkout Pro do Mercado Pago, incluind
 - ✅ Criação de preferências de pagamento
 - ✅ Recebimento e validação de webhooks
 - ✅ Processamento automático de pagamentos aprovados
+- ✅ **Integração automática com API de eventos** (notificação quando pagamento é aprovado)
+- ✅ **Monitoramento automático de arquivos de pagamento**
+- ✅ **Sistema de reprocessamento manual e automático**
 - ✅ Sistema de notificações (email/SMS)
 - ✅ Logs de auditoria completos
 - ✅ Validação de assinaturas de segurança
@@ -248,23 +251,28 @@ curl "http://localhost:3000/payment/status/123456789"
 
 ## 🔗 Endpoints
 
-| Método | Endpoint                                          | Descrição                                  |
-| ------ | ------------------------------------------------- | ------------------------------------------ |
-| POST   | `/payment/create-preference`                      | Criar preferência de pagamento             |
-| GET    | `/payment/success`                                | Retorno para pagamentos aprovados          |
-| GET    | `/payment/failure`                                | Retorno para pagamentos rejeitados         |
-| GET    | `/payment/pending`                                | Retorno para pagamentos pendentes          |
-| GET    | `/payment/status/:id`                             | Consultar status do pagamento              |
-| GET    | `/webhook/list`                                   | Lista todos os webhooks salvos com filtros |
-| GET    | `/webhook/stats`                                  | Mostra estatísticas dos webhooks           |
-| GET    | `/webhook/by-payment/:paymentId`                  | Busca webhooks por payment ID              |
-| GET    | `/webhook/by-reference/:externalReference`        | Busca webhooks por referência externa      |
-| DELETE | `/webhook/clear`                                  | Remove todos os webhooks salvos            |
-| GET    | `/payment/list`                                   | Listar pagamentos com filtros              |
-| GET    | `/payment/history`                                | Gerar histórico de pagamentos              |
-| GET    | `/payment/audit-logs`                             | Visualizar logs de auditoria               |
-| GET    | `/payment/status-by-reference/:externalReference` | Verificar status por referência externa    |
-| POST   | `/webhook/mercadopago`                            | Receber notificações do MP                 |
+| Método | Endpoint                                          | Descrição                                            |
+| ------ | ------------------------------------------------- | ---------------------------------------------------- |
+| POST   | `/payment/create-preference`                      | Criar preferência de pagamento                       |
+| GET    | `/payment/success`                                | Retorno para pagamentos aprovados                    |
+| GET    | `/payment/failure`                                | Retorno para pagamentos rejeitados                   |
+| GET    | `/payment/pending`                                | Retorno para pagamentos pendentes                    |
+| GET    | `/payment/status/:id`                             | Consultar status do pagamento                        |
+| GET    | `/webhook/list`                                   | Lista todos os webhooks salvos com filtros           |
+| GET    | `/webhook/stats`                                  | Mostra estatísticas dos webhooks                     |
+| GET    | `/webhook/by-payment/:paymentId`                  | Busca webhooks por payment ID                        |
+| GET    | `/webhook/by-reference/:externalReference`        | Busca webhooks por referência externa                |
+| DELETE | `/webhook/clear`                                  | Remove todos os webhooks salvos                      |
+| GET    | `/payment/list`                                   | Listar pagamentos com filtros                        |
+| GET    | `/payment/history`                                | Gerar histórico de pagamentos                        |
+| GET    | `/payment/audit-logs`                             | Visualizar logs de auditoria                         |
+| GET    | `/payment/status-by-reference/:externalReference` | Verificar status por referência externa              |
+| POST   | `/webhook/mercadopago`                            | Receber notificações do MP                           |
+| POST   | `/payment-storage/test-approved-payment`          | Testar integração com API de eventos                 |
+| POST   | `/payment-storage/test-specific-payment`          | Testar pagamento específico HR2bdx0e000fij6xqvjtley4 |
+| GET    | `/payment-monitor/status`                         | Status do monitoramento de arquivos                  |
+| POST   | `/payment-monitor/reprocess/:externalReference`   | Reprocessar pagamento específico                     |
+| POST   | `/payment-monitor/reprocess-all`                  | Reprocessar todos os pagamentos aprovados            |
 
 ## 🔒 Configuração de Webhooks
 
@@ -302,6 +310,143 @@ A API processa automaticamente diferentes tipos de produtos baseado na referênc
 | `PRODUCT_`      | Produtos digitais | Gera link de download           |
 | `SERVICE_`      | Serviços          | Ativa serviço específico        |
 | `SUBSCRIPTION_` | Assinaturas       | Configura renovação automática  |
+
+## 🔄 Integração com API de Eventos
+
+Quando um pagamento é aprovado (status: "approved"), o sistema automaticamente notifica outro microserviço através da API de eventos.
+
+### Configuração
+
+Adicione as seguintes variáveis de ambiente:
+
+```env
+EVENTOS_API_TOKEN=seu_token_aqui
+EVENTOS_API_URL=https://jvdpz4zf-3002.brs.devtunnels.ms/api/eventos/convidados/status/id/
+```
+
+### Formato da Notificação
+
+O sistema envia um JSON no formato:
+
+```json
+{
+  "id": "HR2bdx0e000fij6xqvjtley4",
+  "status": "confirmado"
+}
+```
+
+Onde:
+
+- `id`: É o `externalReference` do pagamento
+- `status`: É mapeado de "approved" para "confirmado"
+
+### Mapeamento de Status
+
+| Status Mercado Pago | Status API Eventos |
+| ------------------- | ------------------ |
+| approved            | confirmado         |
+| pending             | pendente           |
+| cancelled/rejected  | cancelado          |
+
+### Testar a Integração
+
+```bash
+# Testar processamento de pagamento
+curl -X POST http://localhost:3000/api/payment-storage/test-process \
+  -H "Content-Type: application/json" \
+  -d '{"externalReference": "HR2bdx0e000fij6xqvjtley4"}'
+
+# Verificar status do monitor
+curl http://localhost:3000/api/payment-monitor/status
+
+# Reprocessar pagamento específico
+curl -X POST http://localhost:3000/api/payment-monitor/reprocess \
+  -H "Content-Type: application/json" \
+  -d '{"externalReference": "HR2bdx0e000fij6xqvjtley4"}'
+```
+
+### Logs de Monitoramento
+
+```
+🚀 ENVIANDO REQUISIÇÃO PARA API DE EVENTOS:
+📍 URL: https://jvdpz4zf-3002.brs.devtunnels.ms/api/eventos/convidados/status/id/
+📋 Payload: {
+  "id": "HR2bdx0e000fij6xqvjtley4",
+  "status": "confirmado"
+}
+🔑 Token: Configurado
+⏰ Timestamp: 2025-01-19T11:05:01.000Z
+
+✅ RESPOSTA DA API DE EVENTOS - SUCESSO:
+📊 Status Code: 200
+🆔 Convidado ID: HR2bdx0e000fij6xqvjtley4
+📝 Status Enviado: confirmado
+⏰ Timestamp: 2025-01-19T11:05:01.000Z
+```
+
+### Características
+
+- **Método HTTP**: PUT
+- **Timeout**: 10 segundos
+- **Autenticação**: Bearer Token
+- **Processamento Automático**: Via monitoramento de arquivos
+- **Prevenção de Duplicatas**: Campo `monitoringTriggered`
+
+Para mais detalhes, consulte o arquivo [INTEGRACAO_EVENTOS_API.md](INTEGRACAO_EVENTOS_API.md).
+
+## 📁 Monitoramento de Arquivos
+
+O sistema monitora automaticamente mudanças nos arquivos de pagamento e executa a lógica de negócio quando necessário.
+
+### Como Funciona
+
+1. **Monitoramento Automático**: O sistema observa o diretório `data/payments/` em tempo real
+2. **Detecção de Mudanças**: Quando um arquivo é criado, modificado ou removido, o sistema detecta automaticamente
+3. **Processamento Inteligente**: Se o pagamento tem status "approved", executa toda a lógica de negócio
+4. **Prevenção de Duplicatas**: Evita processamento duplicado do mesmo arquivo
+
+### Endpoints de Gerenciamento
+
+```bash
+# Verificar status do monitoramento
+curl http://localhost:3000/api/payment-monitor/status
+
+# Reprocessar pagamento específico
+curl -X POST http://localhost:3000/api/payment-monitor/reprocess \
+  -H "Content-Type: application/json" \
+  -d '{"externalReference": "HR2bdx0e000fij6xqvjtley4"}'
+
+# Reprocessar todos os pagamentos aprovados
+curl -X POST http://localhost:3000/api/payment-monitor/reprocess-all
+```
+
+### Logs de Monitoramento
+
+```
+📁 ARQUIVO DETECTADO: {
+  event: 'change',
+  filename: 'HR2bdx0e000fij6xqvjtley4.json',
+  externalReference: 'HR2bdx0e000fij6xqvjtley4',
+  timestamp: '2025-01-19T10:30:00.000Z'
+}
+
+📋 DADOS DO PAGAMENTO CARREGADOS: {
+  externalReference: 'HR2bdx0e000fij6xqvjtley4',
+  status: 'approved',
+  paymentId: '119125020252',
+  amount: 1
+}
+
+🚀 PROCESSANDO PAGAMENTO APROVADO VIA MONITORAMENTO: HR2bdx0e000fij6xqvjtley4
+✅ PAGAMENTO PROCESSADO COM SUCESSO VIA MONITORAMENTO: HR2bdx0e000fij6xqvjtley4
+```
+
+### Benefícios
+
+- **Processamento Automático**: Não precisa de intervenção manual
+- **Recuperação de Falhas**: Reprocessa pagamentos que falharam anteriormente
+- **Consistência**: Garante que todos os pagamentos aprovados sejam processados
+- **Monitoramento em Tempo Real**: Detecta mudanças instantaneamente
 
 ## 📊 Logs e Monitoramento
 

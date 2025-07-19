@@ -1,0 +1,70 @@
+{
+  "externalReference": "HR2bdx0e000fij6xqvjtley4",
+  "status": "approved",
+  "dateCreated": "2025-07-18T21:21:51.000-04:00",
+  "preferenceCreatedAt": "2025-07-19T01:20:54.161Z",
+  "message": "Preferência de pagamento criada - aguardando pagamento",
+  "paymentId": "119125020252",
+  "amount": 1,
+  "currency": "BRL",
+  "payerEmail": "XXXXXXXXXXXx",
+  "paymentMethodId": "pix",
+  "paymentTypeId": "bank_transfer",
+  "statusDetail": "accredited",
+  "dateApproved": "2025-07-18T21:22:39.000-04:00",
+  "dateLastUpdated": "2025-07-19T02:57:06.554Z",
+  "monitoringTriggered": true,
+  "monitoringTriggeredAt": "2025-01-19T11:05:00.000Z",
+  "liveMode": true,
+  "userId": "159972839",
+  "webhookData": {
+    "id": "119125020252",
+    "status": "approved",
+    "external_reference": "HR2bdx0e000fij6xqvjtley4",
+    "transaction_amount": 1,
+    "currency_id": "BRL",
+    "payer": {
+      "email": "XXXXXXXXXXXx"
+    },
+    "payment_method_id": "pix",
+    "payment_type_id": "bank_transfer",
+    "status_detail": "accredited",
+    "date_created": "2025-07-18T21:21:51.000-04:00",
+    "date_approved": "2025-07-18T21:22:39.000-04:00",
+    "date_last_updated": "2025-07-19T02:54:44.499Z",
+    "live_mode": true,
+    "collector_id": "159972839",
+    "operation_type": "regular_payment",
+    "taxes_amount": 0,
+    "shipping_amount": 0,
+    "transaction_amount_refunded": 0,
+    "installments": 1,
+    "description": "Pagamento processado via monitoramento",
+    "statement_descriptor": null,
+    "notification_url": null,
+    "callback_url": null,
+    "processing_mode": "aggregator",
+    "binary_mode": false,
+    "captured": true,
+    "captured_amount": 1,
+    "money_release_date": "2025-07-18T21:22:39.000-04:00",
+    "money_release_status": "released",
+    "payment_method": {
+      "id": "pix",
+      "type": "bank_transfer"
+    },
+    "transaction_details": {
+      "net_received_amount": 0.99,
+      "total_paid_amount": 1,
+      "overpaid_amount": 0,
+      "installment_amount": 0
+    }
+  },
+  "processingDetails": {
+    "processingStartedAt": "2025-07-19T02:57:06.553Z"
+  },
+  "businessLogic": {
+    "processedWithDefaultLogic": true
+  },
+  "auditLogs": []
+}

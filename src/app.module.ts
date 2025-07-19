@@ -6,11 +6,13 @@ import { PaymentController } from './controllers/payment.controller';
 import { WebhookController } from './controllers/webhook.controller';
 
 import { PaymentStorageController } from './controllers/payment-storage.controller';
+import { PaymentMonitorController } from './controllers/payment-monitor.controller';
 import { MercadoPagoService } from './services/mercadopago.service';
 import { WebhookValidationService } from './services/webhook-validation.service';
 import { NotificationService } from './services/notification.service';
 
 import { EventosApiService } from './services/eventos-api.service';
+import { PaymentMonitorService } from './services/payment-monitor.service';
 
 import { PaymentStorageService } from './services/payment-storage.service';
 import configuration from './config/configuration';
@@ -28,6 +30,7 @@ import configuration from './config/configuration';
     WebhookController,
 
     PaymentStorageController,
+    PaymentMonitorController,
   ],
   providers: [
     AppService,
@@ -36,6 +39,7 @@ import configuration from './config/configuration';
     NotificationService,
 
     EventosApiService,
+    PaymentMonitorService,
 
     PaymentStorageService,
   ],
